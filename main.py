@@ -53,4 +53,4 @@ Body:
 with open("gemini_results.json", "w", encoding="utf-8") as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 
-print("Аналітика збережена у gemini_results.json")
+print("Аналітика у gemini_results.json")

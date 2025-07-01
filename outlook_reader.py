@@ -20,9 +20,9 @@ def get_unread_emails():
 
     for num in mail_ids:
         status, msg_data = imap.fetch(num, "(RFC822)")
-        for part in msg_data:
-            if isinstance(part, tuple):
-                msg = email.message_from_bytes(part[1])
+        for parts in msg_data:
+            if isinstance(parts, tuple):
+                msg = email.message_from_bytes(parts[1])
 
                 subject, encoding = decode_header(msg["Subject"])[0]
                 if isinstance(subject, bytes):
