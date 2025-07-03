@@ -8,7 +8,6 @@ load_dotenv()
 app = Flask(__name__, static_folder='../frontend')
 CORS(app)
 
-# Ініціалізація клієнта OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route('/')
