@@ -36,6 +36,6 @@ async function analyzeUnit() {
     }
   } catch (err) {
     console.error("Помилка при запиті:", err);
-    resultDiv.textContent = "Щось пішло не так 😔";
+    resultDiv.textContent = "Щось пішло не так";
   }
 }

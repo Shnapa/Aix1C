@@ -1,5 +1,5 @@
-flask
 requests
+flask
 python-dotenv
 google-generativeai
 flask-cors

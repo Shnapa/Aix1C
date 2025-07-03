@@ -27,7 +27,7 @@ def analyze():
 
         print("Отримано код одиниці:", unit_code)
 
-        prompt = f"Дай детальний аналіз одиниці з кодом {unit_code}."
+        prompt = f"Дай, будь ласка, детальний аналіз одиниці з кодом {unit_code}."
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
