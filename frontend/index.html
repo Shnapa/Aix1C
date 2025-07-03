@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Effetex Аналіз</title>
+  <script src="script.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white flex flex-col items-center justify-center h-screen px-4">
+  <img src="logo.png" alt="Effetex Logo" class="w-40 mb-8" />
+  <label class="text-xl font-medium mb-2">Введіть код одиниці</label>
+  <input id="codeInput" type="text" placeholder="Наприклад: 00123456789"
+         class="border border-gray-400 p-2 rounded w-64 text-center mb-4" />
+  <button onclick="analyzeUnit()"
+          class="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition">
+    Аналізувати
+  </button>
+
+  <div id="result" class="mt-8 max-w-xl text-center text-gray-800 text-lg whitespace-pre-wrap"></div>
+</body>
+</html>
