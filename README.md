@@ -1,5 +1,23 @@
-This project currently reads data from email and sends it to either the **ChatGPT API** or the **Gemini API** for analysis. I am comparing the performance of both models to see how they handle real-world inputs and generate useful insights.
+#### EffeTeX Analyzer
 
-The long-term goal is to build a web application where, after entering a unit code, the AI model (whichever performs better in testing) will automatically analyze the related data and return a summary or conclusion directly in the app.
+**EffeTeX Analyzer** is a simple web tool that allows users to enter a unit code and receive an automatic analysis using OpenAI.
 
-This project is part of my hands-on exploration of AI integration, prompt design, and automating real-life tasks with LLMs.
+##### What this project does
+- The user enters a unit code on the webpage.
+- The site sends the code to a backend server (Flask).
+- The server uses the OpenAI API to generate a meaningful explanation or analysis of the code.
+- The result is displayed on the page.
+
+
+##### Technologies used
+**Frontend**: HTML, CSS (Tailwind), JavaScript
+**Backend:** Python, Flask
+**AI:** OpenAI API
+
+
+##### Requirements
+Python 3.10 or higher
+OpenAI API key in a .env file (OPENAI_API_KEY=...)
+Internet connection
+
+This tool was created for internal use at EffeTeX to quickly understand or interpret unit codes.
