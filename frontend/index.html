@@ -4,19 +4,111 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Effetex Аналіз</title>
-  <script src="script.js" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #result {
+      max-height: 80vh; /* Максимальна висота для контейнера з результатом */
+      overflow-y: auto; /* Дозволяє вертикальне прокручування */
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+      border-radius: 8px;
+      width: 100%;
+      text-align: left;
+      background-color: #f9f9f9;
+    }
+  </style>
 </head>
-<body class="bg-white flex flex-col items-center justify-center h-screen px-4">
+<body class="bg-white flex flex-col items-center justify-center min-h-screen px-4">
   <img src="logo.png" alt="Effetex Logo" class="w-40 mb-8" />
-  <label class="text-xl font-medium mb-2">Введіть код одиниці</label>
-  <input id="codeInput" type="text" placeholder="Наприклад: 123456789"
-         class="border border-gray-400 p-2 rounded w-64 text-center mb-4" />
-  <button onclick="analyzeUnit()"
-          class="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition">
-    Аналізувати
-  </button>
 
+  <!-- Контролі вводу: ЛЕЙБЛ + ІНПУТ + КНОПКА -->
+  <div id="controls" class="flex flex-col items-center">
+    <label for="codeInput" class="text-xl font-medium mb-2">Введіть код одиниці</label>
+    <input id="codeInput" type="text" placeholder="Наприклад: 123456789"
+           class="border border-gray-400 p-2 rounded w-64 text-center mb-4" />
+    <button id="analyzeBtn"
+            class="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition focus:outline-none focus:ring-2 focus:ring-blue-600"
+            onclick="analyzeUnit()">
+      Аналізувати
+    </button>
+  </div>
+
+  <!-- Жирний код одиниці (показуємо лише після відповіді OpenAI) -->
+  <div id="unitCode" class="hidden text-2xl font-extrabold mt-2"></div>
+
+  <!-- Результат аналізу -->
   <div id="result" class="mt-8 max-w-xl text-center text-gray-800 text-lg whitespace-pre-wrap"></div>
+
+  <script>
+    const els = {
+      controls: document.getElementById('controls'),
+      codeInput: document.getElementById('codeInput'),
+      analyzeBtn: document.getElementById('analyzeBtn'),
+      unitCode: document.getElementById('unitCode'),
+      result: document.getElementById('result'),
+    };
+
+    // Enter для запуску
+    els.codeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') analyzeUnit();
+    });
+
+    // Показ/зняття стану завантаження на кнопці
+    function setLoading(isLoading) {
+      els.analyzeBtn.disabled = isLoading;
+      els.analyzeBtn.textContent = isLoading ? 'Обробка…' : 'Аналізувати';
+    }
+
+    // Безпечне встановлення результату (підтримка plain text)
+    function setResult(content) {
+      if (/<\w+[^>]*>/.test(content)) {
+        els.result.innerHTML = content; // УВАГА: якщо джерело надійне
+      } else {
+        els.result.textContent = content;
+      }
+    }
+
+    // Завершення UI після отримання відповіді OpenAI
+    function finalizeUI(code, content) {
+      // Прибираємо поля з форми
+      els.controls.style.display = 'none';
+      // Показуємо жирний код одиниці
+      els.unitCode.textContent = code;
+      els.unitCode.classList.remove('hidden');
+      // Встановлюємо результат
+      setResult(content);
+    }
+
+    async function analyzeUnit() {
+      const code = (els.codeInput.value || '').trim();
+      if (!code) { els.codeInput.focus(); return; }
+
+      try {
+        setLoading(true);
+
+        const response = await fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: code }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          finalizeUI(code, data.result);
+        } else {
+          throw new Error(data.error || 'Невідома помилка');
+        }
+      } catch (err) {
+        console.error(err);
+        setResult('Сталася помилка під час обробки. Спробуйте ще раз.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    window.analyzeUnit = analyzeUnit;
+  </script>
 </body>
 </html>
